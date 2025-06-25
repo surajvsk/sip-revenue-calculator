@@ -56,7 +56,7 @@ This project is a standalone HTML file and does not require any complex setup.
 
 1.  **Clone the repository (Optional, if you have the file already):**
     ```bash
-    git clone <repository-url>
+    git clone [<repository-url>](https://github.com/surajvsk/sip-revenue-calculator.git)
     cd sip-revenue-calculator
     ```
 2.  **Open `index.html`:** Directly open the `index.html` file in your preferred web browser.
