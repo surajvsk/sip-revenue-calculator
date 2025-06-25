@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIP Revenue Calculator</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #d1d5db; /* Light gray track */
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+            border-radius: 4px;
+        }
+
+        .slider:hover {
+            opacity: 1;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #2563eb; /* Blue thumb */
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid #ffffff; /* White border */
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #2563eb; /* Blue thumb */
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid #ffffff; /* White border */
+        }
+
+        /* Custom scrollbar for the table container */
+        .table-container::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6 lg:p-8">
+    <div class="flex flex-col lg:flex-row bg-white rounded-lg shadow-xl p-6 lg:p-8 space-y-6 lg:space-y-0 lg:space-x-8 max-w-7xl mx-auto border border-gray-200">
+
+        <!-- Left Section: SIP Revenue Calculator Inputs -->
+        <div class="w-full lg:w-2/5 p-6 border border-gray-200 rounded-lg shadow-inner bg-gray-50">
+            <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center justify-between">
+                SIP Revenue calculator
+                <button class="text-blue-600 text-sm flex items-center hover:underline focus:outline-none">
+                    <i class="far fa-heart mr-1"></i> Add to Favourites
+                </button>
+            </h2>
+
+            <!-- Select Amount -->
+            <div class="mb-6">
+                <label for="amount" class="block text-gray-700 font-medium mb-2">Select Amount</label>
+                <div class="flex items-center space-x-2">
+                    <span class="text-gray-600">₹</span>
+                    <input type="range" id="amount" min="0" max="10000000" value="1000" class="slider flex-grow">
+                    <input type="number" id="amount-value" value="1000" class="w-24 text-right border border-gray-300 rounded-md px-2 py-1 text-gray-700 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div class="flex justify-between text-sm text-gray-500 mt-1">
+                    <span>₹00</span>
+                    <span>₹10000000</span>
+                </div>
+            </div>
+
+            <!-- Select Duration -->
+            <div class="mb-6">
+                <label for="duration" class="block text-gray-700 font-medium mb-2">Select Duration</label>
+                <div class="flex items-center space-x-2">
+                    <input type="range" id="duration" min="1" max="100" value="00" class="slider flex-grow">
+                    <input type="number" id="duration-value" value="00" class="w-16 text-right border border-gray-300 rounded-md px-2 py-1 text-gray-700 focus:ring-blue-500 focus:border-blue-500">
+                    <span class="text-gray-600">Yrs</span>
+                </div>
+                <div class="flex justify-between text-sm text-gray-500 mt-1">
+                    <span>1 Yrs</span>
+                    <span>40 Yrs</span>
+                </div>
+            </div>
+
+            <!-- No. of SIP Registered -->
+            <div class="mb-6">
+                <label for="sip-registered" class="block text-gray-700 font-medium mb-2">No. of SIP Registered</label>
+                <div class="flex items-center space-x-2">
+                    <input type="range" id="sip-registered" min="1" max="999" value="100" class="slider flex-grow">
+                    <input type="number" id="sip-registered-value" value="100" class="w-20 text-right border border-gray-300 rounded-md px-2 py-1 text-gray-700 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div class="flex justify-between text-sm text-gray-500 mt-1">
+                    <span>1</span>
+                    <span>999</span>
+                </div>
+            </div>
+
+            <!-- Annualized Assumed Returns -->
+            <div class="mb-6">
+                <label for="annual-returns" class="block text-gray-700 font-medium mb-2">Annualized Assumed Returns</label>
+                <div class="flex items-center space-x-2">
+                    <input type="range" id="annual-returns" min="0" max="30" step="0.5" value="15" class="slider flex-grow">
+                    <input type="number" id="annual-returns-value" value="15" class="w-16 text-right border border-gray-300 rounded-md px-2 py-1 text-gray-700 focus:ring-blue-500 focus:border-blue-500">
+                    <span class="text-gray-600">%</span>
+                </div>
+                <div class="flex justify-between text-sm text-gray-500 mt-1">
+                    <span>0%</span>
+                    <span>30%</span>
+                </div>
+            </div>
+
+			<!-- Trail Income -->
+			<div class="mb-6">
+				<label for="trail-income" class="block text-gray-700 font-medium mb-2">Trail Income</label>
+				<div class="flex items-center space-x-2">
+					<input type="range" id="trail-income" min="0.01" max="100" step="0.01" value="0.01" class="slider flex-grow">
+					<input type="text" id="trail-income-value" value="0.01" min="0.01" max="100" step="0.01"
+						   class="w-16 text-right border border-gray-300 rounded-md px-2 py-1 text-gray-700 focus:ring-blue-500 focus:border-blue-500">
+					<span class="text-gray-600">%</span>
+				</div>
+				<div class="flex justify-between text-sm text-gray-500 mt-1">
+					<span>0.01%</span>
+					<span>100%</span>
+				</div>
+			</div>
+
+            <!-- Buttons -->
+            <div class="flex justify-end space-x-4 mt-8">
+                <button id="reset-btn" class="px-6 py-2 rounded-md border border-gray-300 text-gray-700 font-medium hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75">
+                    RESET
+                </button>
+                <button id="calculate-btn" class="px-6 py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 shadow-md">
+                    CALCULATE
+                </button>
+                <button id="export-excel-btn" class="px-6 py-2 rounded-md bg-green-600 text-white font-medium hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 shadow-md">
+                    Export Excel
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Section: SIP Revenue Breakup -->
+        <div class="w-full lg:w-3/5 p-6 border border-gray-200 rounded-lg shadow-inner bg-gray-50 flex flex-col">
+            <h2 class="text-xl font-semibold text-gray-800 mb-6">SIP Revenue Breakup</h2>
+
+            <div class="mb-4">
+                <p class="text-gray-700 font-medium">Total Income/Trail: <span id="total-income-trail" class="text-blue-600 font-bold">₹0.00</span></p>
+            </div>
+
+            <!-- Table Container with scroll -->
+            <div class="overflow-x-auto table-container rounded-lg border border-gray-300">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Months</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Inflow (₹)</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AUM (₹)</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Income/Trail (₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sip-breakup-body" class="bg-white divide-y divide-gray-200">
+                        <!-- Table rows will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="flex justify-between items-center mt-4">
+                <div class="text-sm text-gray-600">
+                    Showing <span id="current-page-range">1-0</span> of <span id="total-rows">0</span> rows
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button id="prev-page-btn" class="px-3 py-1 rounded-md border border-gray-300 text-gray-700 text-sm hover:bg-gray-100 focus:outline-none" disabled>
+                        &lt;
+                    </button>
+                    <div id="page-numbers" class="flex space-x-1">
+                        <!-- Page numbers will be inserted here -->
+                    </div>
+                    <button id="next-page-btn" class="px-3 py-1 rounded-md border border-gray-300 text-gray-700 text-sm hover:bg-gray-100 focus:outline-none" disabled>
+                        &gt;
+                    </button>
+                    <div class="flex items-center space-x-2 ml-4">
+                        <span class="text-sm text-gray-600">No. of rows per page:</span>
+                        <select id="rows-per-page" class="border border-gray-300 rounded-md px-2 py-1 text-sm focus:ring-blue-500 focus:border-blue-500">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get DOM elements
+        const amountSlider = document.getElementById('amount');
+        const amountValueInput = document.getElementById('amount-value');
+        const durationSlider = document.getElementById('duration');
+        const durationValueInput = document.getElementById('duration-value');
+        const sipRegisteredSlider = document.getElementById('sip-registered');
+        const sipRegisteredValueInput = document.getElementById('sip-registered-value');
+        const annualReturnsSlider = document.getElementById('annual-returns');
+        const annualReturnsValueInput = document.getElementById('annual-returns-value');
+        const trailIncomeSlider = document.getElementById('trail-income');
+        const trailIncomeValueInput = document.getElementById('trail-income-value');
+
+        const resetButton = document.getElementById('reset-btn');
+        const calculateButton = document.getElementById('calculate-btn');
+        const exportExcelButton = document.getElementById('export-excel-btn'); // New button element
+
+        const totalIncomeTrailSpan = document.getElementById('total-income-trail');
+        const sipBreakupBody = document.getElementById('sip-breakup-body');
+
+        const prevPageBtn = document.getElementById('prev-page-btn');
+        const nextPageBtn = document.getElementById('next-page-btn');
+        const pageNumbersDiv = document.getElementById('page-numbers');
+        const rowsPerPageSelect = document.getElementById('rows-per-page');
+        const currentPageRangeSpan = document.getElementById('current-page-range');
+        const totalRowsSpan = document.getElementById('total-rows');
+
+        // Initial values for sliders
+        const initialValues = {
+            amount: 0,
+            duration: 0,
+            sipRegistered: 0,
+            annualReturns: 0,
+            trailIncome: 0
+        };
+
+        let sipData = []; // To store the calculated SIP breakup data
+        let currentPage = 1;
+        let rowsPerPage = parseInt(rowsPerPageSelect.value);
+
+        /**
+         * Sets up event listeners for input sliders and number fields.
+         * Syncs slider value with number input and vice versa.
+         */
+        function setupSliderListeners() {
+            // Amount Slider and Input
+            amountSlider.addEventListener('input', () => {
+                amountValueInput.value = amountSlider.value;
+            });
+            amountValueInput.addEventListener('input', () => {
+                let val = parseInt(amountValueInput.value);
+                if (val < parseInt(amountSlider.min)) val = parseInt(amountSlider.min);
+                if (val > parseInt(amountSlider.max)) val = parseInt(amountSlider.max);
+                amountSlider.value = val;
+                amountValueInput.value = val; // Ensure input updates if clamped
+            });
+
+            // Duration Slider and Input
+            durationSlider.addEventListener('input', () => {
+                durationValueInput.value = durationSlider.value;
+            });
+            durationValueInput.addEventListener('input', () => {
+                let val = parseInt(durationValueInput.value);
+                if (val < parseInt(durationSlider.min)) val = parseInt(durationSlider.min);
+                if (val > parseInt(durationSlider.max)) val = parseInt(durationSlider.max);
+                durationSlider.value = val;
+                durationValueInput.value = val;
+            });
+
+            // SIP Registered Slider and Input
+            sipRegisteredSlider.addEventListener('input', () => {
+                sipRegisteredValueInput.value = sipRegisteredSlider.value;
+            });
+            sipRegisteredValueInput.addEventListener('input', () => {
+                let val = parseInt(sipRegisteredValueInput.value);
+                if (val < parseInt(sipRegisteredSlider.min)) val = parseInt(sipRegisteredSlider.min);
+                if (val > parseInt(sipRegisteredSlider.max)) val = parseInt(sipRegisteredSlider.max);
+                sipRegisteredSlider.value = val;
+                sipRegisteredValueInput.value = val;
+            });
+
+            // Annual Returns Slider and Input
+            annualReturnsSlider.addEventListener('input', () => {
+                annualReturnsValueInput.value = annualReturnsSlider.value;
+            });
+            annualReturnsValueInput.addEventListener('input', () => {
+                let val = parseFloat(annualReturnsValueInput.value);
+                if (val < parseFloat(annualReturnsSlider.min)) val = parseFloat(annualReturnsSlider.min);
+                if (val > parseFloat(annualReturnsSlider.max)) val = parseFloat(annualReturnsSlider.max);
+                annualReturnsSlider.value = val;
+                annualReturnsValueInput.value = val;
+            });
+
+			// Trail Income Slider and Input
+			trailIncomeSlider.addEventListener('input', () => {
+				trailIncomeValueInput.value = trailIncomeSlider.value;
+			});
+			// Update slider when input changes
+			trailIncomeValueInput.addEventListener('input', () => {
+				let val = parseFloat(trailIncomeValueInput.value);
+
+				if (!isNaN(val)) {
+					const min = parseFloat(trailIncomeSlider.min);
+					const max = parseFloat(trailIncomeSlider.max);
+					if (val < min) val = min;
+					if (val > max) val = max;
+
+					trailIncomeSlider.value = val;
+				}
+			});
+        }
+
+        /**
+         * Resets all sliders and input fields to their initial default values.
+         */
+        function resetCalculator() {
+            amountSlider.value = initialValues.amount;
+            amountValueInput.value = initialValues.amount;
+            durationSlider.value = initialValues.duration;
+            durationValueInput.value = initialValues.duration;
+            sipRegisteredSlider.value = initialValues.sipRegistered;
+            sipRegisteredValueInput.value = initialValues.sipRegistered;
+            annualReturnsSlider.value = initialValues.annualReturns;
+            annualReturnsValueInput.value = initialValues.annualReturns;
+            trailIncomeSlider.value = initialValues.trailIncome;
+            trailIncomeValueInput.value = initialValues.trailIncome;
+
+            sipData = []; // Clear table data
+            totalIncomeTrailSpan.textContent = '₹0.00'; // Reset total income
+            renderTable(); // Re-render empty table
+            updatePaginationControls();
+        }
+
+        /**
+         * Performs the SIP revenue calculation based on current input values.
+         * Populates the sipData array with monthly breakup.
+         */
+        function calculateSIP() {
+            const monthlyInvestmentPerSip = parseFloat(amountValueInput.value);
+            const totalSipCount = parseInt(sipRegisteredValueInput.value);
+            const durationYears = parseInt(durationValueInput.value);
+            const annualReturnRate = parseFloat(annualReturnsValueInput.value) / 100; // Convert to decimal
+            const trailIncomeRate = parseFloat(trailIncomeValueInput.value) / 100; // Convert to decimal
+
+            const totalMonths = durationYears * 12;
+            const monthlyReturnFactor = 1 + (annualReturnRate / 12); // Factor for compounding AUM
+            const monthlyTrailRate = trailIncomeRate / 12; // Monthly rate for trail income
+
+            sipData = [];
+            let currentAUM = 0;
+            let totalCumulativeTrailIncome = 0;
+
+            for (let month = 1; month <= totalMonths; month++) {
+                const monthlyInflow = monthlyInvestmentPerSip * totalSipCount;
+
+                // Calculate AUM: Previous AUM grows, then new inflow is added
+                currentAUM = (currentAUM * monthlyReturnFactor) + monthlyInflow;
+
+                // Calculate monthly trail income on the current AUM
+                const monthlyTrailIncome = currentAUM * monthlyTrailRate;
+
+                // Accumulate total trail income
+                totalCumulativeTrailIncome += monthlyTrailIncome;
+
+                sipData.push({
+                    month: month,
+                    inflow: monthlyInflow, // Inflow for the month
+                    aum: currentAUM,
+                    incomeTrail: monthlyTrailIncome
+                });
+            }
+
+            totalIncomeTrailSpan.textContent = `₹${totalCumulativeTrailIncome.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            currentPage = 1; // Reset to first page after calculation
+            renderTable();
+            updatePaginationControls();
+        }
+
+        /**
+         * Renders the SIP breakup table for the current page.
+         */
+        function renderTable() {
+            sipBreakupBody.innerHTML = ''; // Clear existing rows
+
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const endIndex = Math.min(startIndex + rowsPerPage, sipData.length);
+            const paginatedData = sipData.slice(startIndex, endIndex);
+
+            if (paginatedData.length === 0 && sipData.length > 0) {
+                // If the current page is empty but there's data, go to the last page
+                currentPage = Math.ceil(sipData.length / rowsPerPage);
+                const newStartIndex = (currentPage - 1) * rowsPerPage;
+                const newEndIndex = Math.min(newStartIndex + rowsPerPage, sipData.length);
+                const newPaginatedData = sipData.slice(newStartIndex, newEndIndex);
+                newPaginatedData.forEach(rowData => {
+                    const row = sipBreakupBody.insertRow();
+                    row.className = 'hover:bg-gray-50'; // Add hover effect
+                    row.insertCell(0).textContent = rowData.month;
+                    row.insertCell(1).textContent = `₹${rowData.inflow.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                    row.insertCell(2).textContent = `₹${rowData.aum.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                    row.insertCell(3).textContent = `₹${rowData.incomeTrail.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                });
+            } else if (paginatedData.length === 0) {
+                // If there's no data at all, display a placeholder row
+                const row = sipBreakupBody.insertRow();
+                const cell = row.insertCell(0);
+                cell.colSpan = 4;
+                cell.textContent = "No data available. Please calculate SIP.";
+                cell.className = "text-center py-4 text-gray-500";
+            } else {
+                paginatedData.forEach(rowData => {
+                    const row = sipBreakupBody.insertRow();
+                    row.className = 'hover:bg-gray-50'; // Add hover effect
+                    row.insertCell(0).textContent = rowData.month;
+                    row.insertCell(1).textContent = `₹${rowData.inflow.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                    row.insertCell(2).textContent = `₹${rowData.aum.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                    row.insertCell(3).textContent = `₹${rowData.incomeTrail.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                });
+            }
+            updatePaginationInfo();
+        }
+
+        /**
+         * Updates pagination buttons and page number display.
+         */
+        function updatePaginationControls() {
+            const totalPages = Math.ceil(sipData.length / rowsPerPage);
+
+            prevPageBtn.disabled = currentPage === 1;
+            nextPageBtn.disabled = currentPage === totalPages || sipData.length === 0;
+
+            pageNumbersDiv.innerHTML = '';
+            // Only show up to 3 page numbers around the current page, plus first/last if far away
+            let startPage = Math.max(1, currentPage - 1);
+            let endPage = Math.min(totalPages, currentPage + 1);
+
+            if (currentPage === 1) endPage = Math.min(totalPages, 3);
+            if (currentPage === totalPages) startPage = Math.max(1, totalPages - 2);
+
+            if (startPage > 1) {
+                pageNumbersDiv.appendChild(createPageButton(1));
+                if (startPage > 2) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.textContent = '...';
+                    ellipsis.className = 'px-2 py-1 text-sm text-gray-500';
+                    pageNumbersDiv.appendChild(ellipsis);
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                pageNumbersDiv.appendChild(createPageButton(i));
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.textContent = '...';
+                    ellipsis.className = 'px-2 py-1 text-sm text-gray-500';
+                    pageNumbersDiv.appendChild(ellipsis);
+                }
+                pageNumbersDiv.appendChild(createPageButton(totalPages));
+            }
+        }
+
+        /**
+         * Creates a page number button.
+         * @param {number} pageNum - The page number for the button.
+         * @returns {HTMLButtonElement} The created button element.
+         */
+        function createPageButton(pageNum) {
+            const button = document.createElement('button');
+            button.textContent = pageNum;
+            button.className = `px-3 py-1 rounded-md text-sm border ${pageNum === currentPage ? 'bg-blue-600 text-white border-blue-600' : 'border-gray-300 text-gray-700 hover:bg-gray-100'} focus:outline-none`;
+            button.addEventListener('click', () => {
+                currentPage = pageNum;
+                renderTable();
+                updatePaginationControls();
+            });
+            return button;
+        }
+
+        /**
+         * Updates the "Showing X-Y of Z rows" text.
+         */
+        function updatePaginationInfo() {
+            const startIndex = (currentPage - 1) * rowsPerPage + 1;
+            const endIndex = Math.min(startIndex + rowsPerPage - 1, sipData.length);
+            totalRowsSpan.textContent = sipData.length;
+            if (sipData.length === 0) {
+                currentPageRangeSpan.textContent = '0-0';
+            } else {
+                currentPageRangeSpan.textContent = `${startIndex}-${endIndex}`;
+            }
+        }
+
+        /**
+         * Exports the calculated SIP data to a CSV file.
+         */
+        function exportToExcel() {
+            if (sipData.length === 0) {
+                console.log("No data to export.");
+                // You could add a user-friendly message here, e.g., a temporary div
+                // that says "No data to export" instead of an alert.
+                return;
+            }
+
+            // CSV Header
+            const headers = ["Month", "Inflow (₹)", "AUM (₹)", "Income/Trail (₹)"];
+            let csvContent = headers.join(",") + "\n";
+
+            // CSV Rows
+            sipData.forEach(row => {
+                const month = row.month;
+                // Format numbers to avoid issues with commas in CSV, remove '₹' and use plain numbers
+                const inflow = row.inflow.toFixed(2);
+                const aum = row.aum.toFixed(2);
+                const incomeTrail = row.incomeTrail.toFixed(2);
+                csvContent += `${month},${inflow},${aum},${incomeTrail}\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'sip_revenue_breakup.csv');
+            document.body.appendChild(link); // Append to body to make it clickable
+            link.click(); // Programmatically click the link to trigger download
+            document.body.removeChild(link); // Clean up the link element
+            URL.revokeObjectURL(url); // Release the object URL
+        }
+
+
+        // Event Listeners
+        resetButton.addEventListener('click', resetCalculator);
+        calculateButton.addEventListener('click', calculateSIP);
+        exportExcelButton.addEventListener('click', exportToExcel); // Add event listener for export button
+
+        prevPageBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable();
+                updatePaginationControls();
+            }
+        });
+
+        nextPageBtn.addEventListener('click', () => {
+            const totalPages = Math.ceil(sipData.length / rowsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTable();
+                updatePaginationControls();
+            }
+        });
+
+        rowsPerPageSelect.addEventListener('change', (event) => {
+            rowsPerPage = parseInt(event.target.value);
+            currentPage = 1; // Reset to first page when rows per page changes
+            renderTable();
+            updatePaginationControls();
+        });
+
+        // Initialize the calculator on page load
+        window.onload = function() {
+            setupSliderListeners();
+            resetCalculator(); // Set initial values and clear table
+        };
+
+    </script>
+</body>
+</html>
